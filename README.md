@@ -29,3 +29,17 @@ npm install mobx mobx-react
 
 ## reactions
 reactions的目的是对自动发生的副作用进行建模。 它们的意义在于为你的可观察状态创建消费者，以及每当关联的值发生变化时，自动运行副作用
+
+# [mobx-react](https://github.com/mobxjs/mobx/tree/main/packages/mobx-react)
+
+- [mobx-react-lite](https://github.com/mobxjs/mobx/tree/main/packages/mobx-react-lite)
+
+## 用法：src/bak下的代码
+- observer：对函数组件和class组件中的使用
+- <Observer>：是一个React组件，它将观察者应用于组件中的匿名区域。可以只包裹想被观察的部分，而不是整个组件
+- useObserver：[已废弃]允许您使用类似观察者的行为，但仍然允许您以任何方式优化组件（例如，使用自定义areEqual的memo，使用forwardRef等），并准确声明观察到的部分（渲染阶段）
+- useLocalObservable：返回对象的所有属性都将自动可观察，getter将转换为计算属性，方法将绑定到存储并自动应用mobx事务
+
+
+# 实现一个todoList
+具体代码看 App.jsx 、store和components文件夹
