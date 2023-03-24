@@ -3,12 +3,26 @@ import { getNextId, addHiddenProp, $mobx, getAdm } from './utils'
 export class ObservableValue {
     constructor(value) {
         this.value = value; // {name:1} 中的1其实是存在这里的
+        this.observers = new Set(); // 此刻观察值的监听着，或者说观察者保存在this.observers
     }
     get() {
+        // 调用get时包裹一下，报告当前可观察值被观察到了
+        reportObserved(this)
         return this.value;
     }
     setNewValue(newValue) {
         this.value = newValue
+    }
+}
+
+//报告观察到 
+export function reportObserved(observableValue) {
+    // reaction中 track 方法中，fn执行执行前 reaction的实例赋值给了trackingDerivation，这里可以取出来知道当前响应器是哪个
+    //  派生响应器
+    const trackingDerivation = globalState.trackingDerivation
+    if (trackingDerivation !== null) {
+        // 相当于把 {name:1} 的observableValue放到reaction的observing数组中，建立关联
+        trackingDerivation.observing.push(observableValue);
     }
 }
 

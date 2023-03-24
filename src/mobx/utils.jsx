@@ -27,5 +27,6 @@ export function getAdm(target) {
 }
 
 export const globalState = {
-    pendingReactions: []
+    pendingReactions: [],
+    trackingDerivation: null
 }

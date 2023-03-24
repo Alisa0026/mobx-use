@@ -9,7 +9,9 @@ function autorun(view) {
     const reaction = new Reaction(
         name,
         function () {// 响应触发时执行的函数，里面调用view方法
-            view();
+            // view();
+            // 这里不直接调用view，用this.track 跟踪view执行，跟踪view用到的可观察变量
+            this.track(view)
         }
     )
     // 进行调度，准备执行一次

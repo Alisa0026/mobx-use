@@ -96,3 +96,11 @@ class Person {}
 3. 然后基于target 去new 一个代理Proxy对象，然后把代理对象返回。也就是 dynamicObservableObject
 4. 然后给 proxy添加属性，extendObservable方法来添加。循环属性把key和属性表述器传给 adm.extend，给代理对象扩展属性。然后走到 defineObservableProperty 方法中。
 5. defineObservableProperty 中创建新的属性描述器，给target添加属性，真正的value值是放到 ObservableValue 实例中的。描述器的get/set方法最终也是调用管理器的 getObservablePropValue 和 setObservablePropValue 方法，最终会操作values中的 observableValue，取值也是从 observableValue 中取，赋值给 observableValue 赋值。
+
+## 实现autorun
+1. autorun 中会创建一个 Reaction 实例，会传一个function，里面执行 this.track(view)
+2. 在 Reaction 的 track 方法中，执行传入的函数fn之前会把把实例保存到全局 trackingDerivation 上。
+3. fn 执行时，读取可观察的变量，会走ObservableValue 中的 get 方法，此时方法  reportObserved 报告观察到了
+4. reportObserved 会从全局 trackingDerivation 中取到 Reaction 实例，给 Reaction 上的 observing 数组中 push 了一个 observableValue
+5. 最后 track 执行最后调用 bindDependencies 绑定依赖。把reaction实例传入，获取 reaction 上的 observing 数组进行遍历，拿到每个 observableValue，获取 observableValue 上 observers 观察者的集合，把当前的 reaction 放进去。实现双向绑定（**我[Reaction]知道观察哪些变量[observableValue]，这些变量[observableValue]知道是[Reaction]谁观察了自己**）。
+6. 接下来考虑赋值时，要找到可观察对象的观察者让他们执行。
