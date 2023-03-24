@@ -1,4 +1,4 @@
-import { observable, reaction, computed, autorun, action, flow, makeAutoObservable } from 'mobx';
+import { observable, computed, autorun, action, flow, makeAutoObservable, reaction } from 'mobx';
 class Doubler {
   value // 这里是1
   age = 100
@@ -16,18 +16,6 @@ class Doubler {
   add() {
     this.value++
     this.value++
-  }
-
-  async fetch1() {
-    let amount = await new Promise((resolve) => setTimeout(() => resolve(5), 1000))
-    this.value += amount
-  }
-
-  // 实现异步用yield，没有传染性，不会影响其他代码
-  // 所以 flow 是 async / await 的一个替代方案
-  *fetch() {// 类似redux-saga
-    const amount = yield new Promise((resolve) => setTimeout(() => resolve(5), 1000))
-    this.value += amount;
   }
 }
 // 创建实例传1

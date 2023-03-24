@@ -1,10 +1,16 @@
-import { observable, reaction, computed, autorun, action, flow, makeAutoObservable } from 'mobx';
+import { observable, makeObservable, computed, autorun, action, flow } from 'mobx';
 class Doubler {
   value // 这里是1
-  age = 100
   constructor(value) {
-    //  PI 可以特殊处理，,{autoBind:true} 自动绑定this永远是true
-    makeAutoObservable(this, { PI: false }, { autoBind: true })
+    // this是实例，给value属性指定一个注解叫observable，让实例上的value属性可观察
+    // 一般放到类中使用
+    makeObservable(this, {
+      value: observable,
+      double: computed, // 标记为计算属性，访问才计算，不访问不计算，结果会进行缓存，依赖项不改变，用缓存值
+      add: action,
+      // fetch: flow
+      fetch: flow.bound //自动绑this指针，不论在哪执行，this永远指向当前实例
+    })
     this.value = value
   }
 
@@ -32,11 +38,12 @@ class Doubler {
 }
 // 创建实例传1
 const doubler = new Doubler(1);
+autorun(() => {
+  // 没处理value时，把这里doubler.value改2不会打印2
+  console.log(doubler.value);
+});
 
-// 不会立刻执行，只会在值发生变化后执行
-reaction(
-  () => doubler.value,// data函数，会返回一个值
-  (value, previousValue) => console.log('reaction', value, previousValue)// 副作用函数，会返回两个值
-)
-doubler.value = 2
-doubler.age = 2 // 改age不会触发reaction，因为它目前依赖的是value
+// doubler.fetch();
+// 下面直接这样是不可以的，需要flow.bound下
+const fetch = doubler.fetch;
+fetch()
