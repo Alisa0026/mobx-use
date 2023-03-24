@@ -25,3 +25,7 @@ export function addHiddenProp(object, propName, value) {
 export function getAdm(target) {
     return target[$mobx]
 }
+
+export const globalState = {
+    pendingReactions: []
+}
