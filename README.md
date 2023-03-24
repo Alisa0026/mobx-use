@@ -43,3 +43,18 @@ reactions的目的是对自动发生的副作用进行建模。 它们的意义�
 
 # 实现一个todoList
 具体代码看 App.jsx 、store和components文件夹
+
+# mobx 实现
+
+## 基础知识
+### Reflect
+- set: 静态方法 Reflect.set() 工作方式就像在一个对象上设置一个属性
+  ```js
+  Reflect.set(target, propertyKey, value)
+  ```
+- get:Reflect.get()方法与从 对象 (target[propertyKey]) 中读取属性类似，但它是通过一个函数执行来操作的。
+  ```js
+  Reflect.get(target, propertyKey)
+  ```
+### Proxy
+

@@ -1,20 +1,22 @@
-import { createRoot } from "react-dom/client";
+/* import { createRoot } from "react-dom/client";
 import Counter from "./Counter";
 import App from "./App";
 
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 // root.render(<Counter />);
-root.render(<App />);
+root.render(<App />); */
 
 
 // 可以对源码做个debugger
-/* import { observable, autorun } from 'mobx';
+import { observable } from './mobx';// 这里用了自己的库
 let obj = { name: '1' }
-debugger
+// debugger
 let proxyObj = observable(obj);
-debugger
-autorun(() => {
+console.log(proxyObj);
+// debugger
+// 创建一个响应器，其实也就是观察者，负责观察可观察的值
+/* autorun(() => {
     console.log(proxyObj.name);
 })
 proxyObj.name = '2'; */
