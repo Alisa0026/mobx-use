@@ -58,3 +58,41 @@ reactions的目的是对自动发生的副作用进行建模。 它们的意义�
   ```
 ### Proxy
 
+```js
+let obj ={name:'123'};
+
+let proxyObj = new Proxy(obj,{
+  set(target,key,value){
+    console.log(target,key,value);
+    return Reflect.set(target,key,value);
+  },
+  get(target,key){
+    console.log(target,key);
+   return Reflect.get(target,key);
+  }
+});
+
+console.log(proxyObj.name);
+proxyObj.name = '567';
+```
+
+### decorator
+```js
+function logger(target) {
+    console.log(target);
+}
+
+@logger
+class Person {}
+```
+
+## 实现 observable 流程：
+看 mobx 下 observableobject.jsx 文件内容：
+> - 前3步看图img/1.ObservableObjectAdministration.jpg 把普通对象变成代理对象，以及和管理器ObservableObjectAdministration的关系
+> - 后2步看图img/2.extendObserble.jpg 扩展属性
+
+1. 先创建空的代理对象（{}的代理对象），然后再给代理对象添加属性（就是原始对象的属性 {name:1,age:2}中的name,age）
+2. 如何把普通对象变成代理对象？（asDynamicObservableObject方法中）给target配置管理器，创建adm，然后给target加$mobx属性等于管理器
+3. 然后基于target 去new 一个代理Proxy对象，然后把代理对象返回。也就是 dynamicObservableObject
+4. 然后给 proxy添加属性，extendObservable方法来添加。循环属性把key和属性表述器传给 adm.extend，给代理对象扩展属性。然后走到 defineObservableProperty 方法中。
+5. defineObservableProperty 中创建新的属性描述器，给target添加属性，真正的value值是放到 ObservableValue 实例中的。描述器的get/set方法最终也是调用管理器的 getObservablePropValue 和 setObservablePropValue 方法，最终会操作values中的 observableValue，取值也是从 observableValue 中取，赋值给 observableValue 赋值。
