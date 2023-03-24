@@ -1,4 +1,4 @@
-import { getNextId, addHiddenProp, $mobx, getAdm } from './utils'
+import { getNextId, addHiddenProp, $mobx, getAdm, globalState } from './utils'
 // 可观察值
 export class ObservableValue {
     constructor(value) {
@@ -12,7 +12,18 @@ export class ObservableValue {
     }
     setNewValue(newValue) {
         this.value = newValue
+        // 广播我这个可观察值被改变了
+        propagateChanged(this)
     }
+}
+
+// 通知大家自己被改变了
+export function propagateChanged(observableValue) {
+    const { observers } = observableValue;
+    // 循环观察者进行执行，调用对应的 runReaction 方法
+    observers.forEach(observer => {
+        observer.runReaction()
+    })
 }
 
 //报告观察到 
@@ -38,7 +49,11 @@ class ObservableObjectAdministration {
         return this.target[key]
     }
     set(key, value) {
-        return this.target[key] = value;
+        // 赋值的时候走 setObservablePropValue 方法,然后会走ObservableValue 的 setNewValue，然后就会广播改变，通知观察者进行执行
+        if (this.values.has(key)) {
+            return this.setObservablePropValue(key, value)
+        }
+        // return this.target[key] = value;
     }
     // key 属性名，descriptor 属性描述器
     extend(key, descriptor) {
