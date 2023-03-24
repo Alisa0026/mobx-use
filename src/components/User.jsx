@@ -3,7 +3,8 @@ import StoreContext from '../context';
 import { observer } from "mobx-react";
 
 // 用context，store变了，不用频繁修改组件
-
+// useContext 作用：
+// 通过 context 可以从顶层组件跨层级传递数据
 const User = observer(() => {
     const { userStore } = useContext(StoreContext);
     const { username, isLogin, login, logout } = userStore;
