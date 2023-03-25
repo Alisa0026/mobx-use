@@ -19,3 +19,8 @@ export function useObserver(fn) {
     });
     return rendering;
 }
+
+// Observer 函数组件，children是个render函数，所以直接用 useObserver 把 children 传入即可
+export function Observer({ children }) {
+    return useObserver(children);
+}

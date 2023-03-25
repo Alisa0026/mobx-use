@@ -111,3 +111,11 @@ class Person {}
 ## useObserver
 
 创建一个 Reaction 响应实例，通过 reaction.track 来跟踪依赖，当可观察值发生改变，会重新执行forceUpdate
+
+## Observer 组件
+Observer 函数组件，children是个render函数，所以直接用 useObserver 把 children 传入即可
+```js
+export function Observer({ children }) {
+    return useObserver(children);
+}
+```
