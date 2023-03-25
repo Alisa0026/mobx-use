@@ -105,3 +105,9 @@ class Person {}
 5. 最后 track 执行最后调用 bindDependencies 绑定依赖。把reaction实例传入，获取 reaction 上的 observing 数组进行遍历，拿到每个 observableValue，获取 observableValue 上 observers 观察者的集合，把当前的 reaction 放进去。实现双向绑定（**我[Reaction]知道观察哪些变量[observableValue]，这些变量[observableValue]知道是[Reaction]谁观察了自己**）。
 6. 接下来考虑赋值时，要找到可观察对象的观察者让他们执行。在 ObservableValue 的 setNewValue 加 方法 propagateChanged 用来广播我这个可观察值被改变了，通知观察者进行执行。
 7. 赋值的时候走 setObservablePropValue 方法,然后会走ObservableValue 的 setNewValue，然后就会广播改变，通知观察者进行执行
+
+
+# mobx-redux 实现
+## useObserver
+
+创建一个 Reaction 响应实例，通过 reaction.track 来跟踪依赖，当可观察值发生改变，会重新执行forceUpdate

@@ -1,15 +1,17 @@
-/* import { createRoot } from "react-dom/client";
+import { createRoot } from "react-dom/client";
 import Counter from "./Counter";
 import App from "./App";
+import CounterReactMobx from "./Counter_react_mobx";
 
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 // root.render(<Counter />);
-root.render(<App />); */
+// root.render(<App />);
+root.render(<CounterReactMobx />);
 
 
 // 可以对源码做个debugger
-import { observable, autorun } from './mobx';// 这里用了自己的库
+/* import { observable, autorun } from './mobx';// 这里用了自己的库
 let obj = { name: '1' }
 // debugger
 let proxyObj = observable(obj);
@@ -20,4 +22,4 @@ console.log(proxyObj);
 autorun(() => {
     console.log(proxyObj.name);
 })
-proxyObj.name = '2';
+proxyObj.name = '2'; */
