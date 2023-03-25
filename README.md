@@ -119,3 +119,8 @@ export function Observer({ children }) {
     return useObserver(children);
 }
 ```
+
+## observer 高阶组件
+
+observer 是个高阶组件，oldComponent 用 useObserver 套一下就可以变成响应式
+

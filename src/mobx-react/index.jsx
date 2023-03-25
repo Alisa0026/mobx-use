@@ -24,3 +24,12 @@ export function useObserver(fn) {
 export function Observer({ children }) {
     return useObserver(children);
 }
+
+// observer 是个高阶组件，oldComponent 用 useObserver 套一下就可以变成响应式
+export function observer(oldComponent) {
+    // 新的函数组件
+    let observerComponent = (props, ref) => {
+        return useObserver(() => oldComponent(props, ref));
+    };
+    return observerComponent;
+}
