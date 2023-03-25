@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Reaction } from 'mobx';
+import { Reaction, observable } from 'mobx';
 
 // 自定义hooks，把函数组件变成响应式的
 // fn 可能是函数组件，可能是render函数
@@ -59,4 +59,10 @@ export function makeClassComponentObserver(classComponent) {
         return rendering
     }
     return classComponent
+}
+
+// useLocalObservable 
+export function useLocalObservable(initializer) {
+    // 传入的 initializer 函数返回的对象变成可观察对象
+    return React.useState(() => observable(initializer(), {}, { autoBind: true }))[0];
 }

@@ -125,3 +125,7 @@ export function Observer({ children }) {
 - observer 是个高阶组件，oldComponent 用 useObserver 套一下就可以变成响应式
 
 - 如果是类组件,要通过 makeClassComponentObserver 来重写类组件的 render 方法
+
+## useLocalObservable 
+
+传入的函数返回的对象通过 mobx 的 observable 变成可观察对象
