@@ -27,9 +27,36 @@ export function Observer({ children }) {
 
 // observer 是个高阶组件，oldComponent 用 useObserver 套一下就可以变成响应式
 export function observer(oldComponent) {
+    // 判断是不是类组件
+    if (oldComponent.prototype.isReactComponent) {
+        return makeClassComponentObserver(oldComponent);
+    }
+
     // 新的函数组件
     let observerComponent = (props, ref) => {
         return useObserver(() => oldComponent(props, ref));
     };
     return observerComponent;
+}
+
+// 重写类组件 render 方法
+export function makeClassComponentObserver(classComponent) {
+    // 重新类组件的render方法
+    const prototype = classComponent.prototype // 获取 prototype
+    const originalRender = prototype.render // 获取 render 方法
+    // 重写 render 方法
+    prototype.render = function () {
+        // 先把老方法绑定this
+        const boundOriginalRender = originalRender.bind(this)
+        // 创建一个响应, 传入一个强制更新的函数,每个类组件都有 forceUpdate 方法
+        const reaction = new Reaction(`render`, () => React.Component.prototype.forceUpdate.call(this))
+        let rendering;
+        // 跟踪函数
+        reaction.track(() => {
+            // 调用老的 render 方法,然后返回虚拟dom
+            rendering = boundOriginalRender();
+        })
+        return rendering
+    }
+    return classComponent
 }

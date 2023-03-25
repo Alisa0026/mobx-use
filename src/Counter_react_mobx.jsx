@@ -40,11 +40,26 @@ let store = new Store();
 }; */
 
 // observer 是高阶组件，接收函数组件返回新组件
-export default observer(function () {
+/* export default observer(function () {
     return (
         <div>
             <p>{store.number}</p>
             <button onClick={store.add}>+</button>
         </div>
     )
-});  
+});   */
+
+// 类组件用装饰器
+@observer
+class Counter extends React.Component {
+    render() {
+        return (
+            <div>
+                <p>{store.number}</p>
+                <button onClick={store.add}>+</button>
+            </div>
+        )
+    }
+}
+// 装饰器那个等价于 export default observer(Counter)
+export default Counter;
